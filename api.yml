@@ -1,0 +1,92 @@
+swagger: "2.0"
+info:
+  description: "Bitcoin exchange API"
+  version: "1.0.0"
+  title: "Bitcoin exchange API"
+host: "petstore.swagger.io"
+basePath: "/v2"
+tags:
+- name: "rates"
+  description: "Bitcoin rates"
+schemes:
+- "http"
+paths:
+  /rate/{currency}/latest:
+    get:
+      tags:
+      - "rates"
+      summary: "Latest available rate for given currency"
+      description: ""
+      operationId: "getLatest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "currency"
+        type: "string"
+        description: "3 letter currency code. E.g. USD, EUR"
+        required: true
+      responses:
+        200:
+          $ref:  "#/definitions/BitcoinRate"
+        400:
+          description: "Bad requst - unknown currency or no rates available"
+
+  /rate/{currency}:
+    get:
+      tags:
+      - "rates"
+      summary: "Get all historical rates between provided dates from bitcoin to given currency"
+      description: ""
+      operationId: "getRange"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "currency"
+        type: "string"
+        description: "3 letter currency code. E.g. USD, EUR"
+        required: true
+      - in: "query"
+        name: "startDate"
+        type: "string"
+        description: "Earliest date of bitcoin rates to get in ISO format E.g. 2019-05-01"
+        required: true
+      - in: "query"
+        name: "endDate"
+        type: "string"
+        description: "Latest date (inclusive) of bitcoin rates to get in ISO format E.g. 2019-05-01. If not provided defaults to current day"
+        required: false
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BitcoinRate"
+        400:
+          description: "Bad requst - unknown currency or no rates available"
+definitions:
+  BitcoinRate:
+    type: "object"
+    required:
+    - "buy"
+    - "sell"
+    - "fetchTimestamp"
+    properties:
+      buy:
+        type: "number"
+        example: 2345.45
+      sell:
+        type: "number"
+        example: 2334.45
+      fetchTimestamp:
+        type: "string"
+        example: "2019-05-14T22:48:13.510"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

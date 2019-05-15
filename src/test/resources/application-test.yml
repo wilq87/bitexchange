@@ -1,0 +1,12 @@
+
+blockchain:
+  rates.api.url: https://blockchain.info/ticker
+  fetch.rate.millis: 10000
+
+spring:
+  influxdb:
+    url: http://localhost:8086
+    username: bitexchange
+    password: secretpassword
+    database: bitexchange-test
+    retention-policy: autogen
